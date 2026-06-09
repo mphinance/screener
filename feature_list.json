@@ -197,7 +197,7 @@
       "click run",
       "assert rows change"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": 20,
@@ -208,7 +208,7 @@
       "toggle any/all",
       "assert query body match field"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": 21,
@@ -219,7 +219,7 @@
       "assert rows are crypto",
       "assert fields adapt"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": 22,
@@ -230,7 +230,7 @@
       "toggle a column",
       "assert header changes"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": 23,
@@ -241,7 +241,7 @@
       "run",
       "assert column appears with values"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": 24,
@@ -251,7 +251,7 @@
       "add zscore stat col",
       "assert values populate"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": 25,
@@ -334,7 +334,7 @@
       "assert filters applied",
       "assert rows"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": 33,
@@ -344,7 +344,7 @@
       "iterate presets",
       "assert no crash"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": 34,
