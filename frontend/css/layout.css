@@ -93,14 +93,22 @@
   border-radius: var(--radius);
   box-shadow: var(--shadow-soft);
   overflow: hidden;
+  /* Keep natural height so the rail overflows and scrolls, instead of the
+   * sections being squashed by flexbox and clipping their content. */
+  flex: 0 0 auto;
 }
 .rail-section > .rail-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: var(--sp-2);
   padding: var(--sp-2) var(--sp-3);
   border-bottom: 1px solid var(--line-soft);
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.15s ease;
 }
+.rail-section > .rail-head:hover { background: rgba(0, 240, 255, 0.05); }
 .rail-section > .rail-head .rail-title {
   font-family: var(--font-mono);
   font-size: 11px;
@@ -109,7 +117,39 @@
   text-transform: uppercase;
   color: var(--text);
 }
-.rail-section > .rail-body { padding: var(--sp-3); }
+/* Collapse chevron, injected by panels.js into each head. */
+.rail-section > .rail-head .rail-chevron {
+  color: var(--muted);
+  font-size: 10px;
+  transition: transform 0.18s ease, color 0.15s ease;
+}
+.rail-section > .rail-head:hover .rail-chevron { color: var(--cyan); }
+.rail-section.collapsed > .rail-head .rail-chevron { transform: rotate(-90deg); }
+.rail-section > .rail-body {
+  padding: var(--sp-3);
+  /* Each panel body scrolls internally so a long list (presets) stays
+   * reachable without making the whole rail enormous. */
+  max-height: 46vh;
+  overflow-y: auto;
+}
+.rail-section.collapsed > .rail-body { display: none; }
+
+/* ---- Rail resize handle (drag the right edge to set --rail-w) ---- */
+#rail-resize {
+  position: fixed;
+  top: var(--topbar-h);
+  bottom: var(--footer-h);
+  left: var(--rail-w);
+  width: 6px;
+  margin-left: -3px;
+  cursor: col-resize;
+  z-index: 20;
+  background: transparent;
+  transition: background 0.15s ease;
+}
+#rail-resize:hover,
+#rail-resize.dragging { background: rgba(0, 240, 255, 0.35); box-shadow: 0 0 10px rgba(0, 240, 255, 0.5); }
+body.rail-resizing { cursor: col-resize; user-select: none; }
 
 /* ---- Main panel ---- */
 #main-panel {

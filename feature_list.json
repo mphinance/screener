@@ -575,5 +575,40 @@
       "assert MACD.macd|1W column with real value"
     ],
     "passes": true
+  },
+  {
+    "id": 56,
+    "category": "frontend",
+    "description": "Left rail and each panel scroll so all presets and sections are reachable (overflow fix)",
+    "steps": [
+      "load app",
+      "assert preset body overflow-y auto",
+      "scroll to last preset",
+      "assert reachable"
+    ],
+    "passes": true
+  },
+  {
+    "id": 57,
+    "category": "frontend",
+    "description": "Collapsible rail panels: click a section header to collapse/expand, persisted to localStorage",
+    "steps": [
+      "click header",
+      "assert body hidden",
+      "reload",
+      "assert state restored"
+    ],
+    "passes": true
+  },
+  {
+    "id": 58,
+    "category": "frontend",
+    "description": "Resizable left rail: drag the right edge to set width, double-click resets, persisted",
+    "steps": [
+      "drag handle",
+      "assert --rail-w changes",
+      "assert persisted"
+    ],
+    "passes": true
   }
 ]
