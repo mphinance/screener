@@ -1,0 +1,14 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
+*.egg-info/
+.pytest_cache/
+.DS_Store
+Thumbs.db
+node_modules/
+*.log
+.env
+secrets.env
+docs/screenshots/*.tmp.png
