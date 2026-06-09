@@ -1,4 +1,4 @@
-/* table.css — the dense neon data table.
+/* table.css - the dense neon data table.
  * Sticky header, zebra rows, hover glow, numeric right-align in mono,
  * sign-colored change cells. No em dashes. */
 
@@ -41,6 +41,116 @@
   font-size: 9px;
   opacity: 0.85;
 }
+
+/* Header is the click target for sort; show it. */
+.screener-table thead th[data-col] { cursor: pointer; }
+.screener-table thead th .th-label { vertical-align: middle; }
+
+/* Active sort header gets a cyan underglow. */
+.screener-table thead th.is-sorted {
+  color: var(--cyan);
+  border-bottom-color: rgba(0, 240, 255, 0.6);
+}
+
+/* Sort priority badge: neon pill with priority number + direction arrow. */
+.screener-table thead th .sort-badge {
+  display: inline-flex;
+  align-items: center;
+  margin-left: 6px;
+  padding: 1px 5px;
+  border-radius: 999px;
+  background: rgba(0, 240, 255, 0.10);
+  border: 1px solid rgba(0, 240, 255, 0.4);
+  color: var(--cyan);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0;
+  vertical-align: middle;
+}
+
+/* Per-column heatmap toggle in the header. Dim until active. */
+.screener-table thead th .heat-toggle {
+  margin-left: 6px;
+  color: var(--muted);
+  font-size: 10px;
+  opacity: 0.4;
+  cursor: pointer;
+  transition: color 0.12s ease, opacity 0.12s ease;
+}
+.screener-table thead th .heat-toggle:hover { opacity: 0.9; color: var(--cyan); }
+.screener-table thead th .heat-toggle.is-on {
+  opacity: 1;
+  color: var(--green);
+  text-shadow: 0 0 6px rgba(0, 255, 136, 0.6);
+}
+
+/* ---- Powerbar (in-host toolbar above the table) ---- */
+.table-powerbar {
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 7;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 6px 10px;
+  background: rgba(14, 14, 18, 0.96);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--line-soft);
+}
+.table-powerbar .tp-btn {
+  padding: 3px 9px;
+  background: rgba(0, 240, 255, 0.06);
+  border: 1px solid rgba(0, 240, 255, 0.28);
+  border-radius: var(--radius-sm);
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: box-shadow 0.12s ease, border-color 0.12s ease, color 0.12s ease;
+}
+.table-powerbar .tp-btn:hover { color: var(--text); border-color: var(--cyan); box-shadow: var(--glow-cyan); }
+.table-powerbar .tp-btn.is-on { color: var(--cyan); border-color: var(--cyan); box-shadow: var(--glow-cyan); }
+.table-powerbar .tp-count {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.04em;
+  color: var(--muted);
+}
+
+/* ---- Per-column filter row under the header ---- */
+.screener-table thead tr.filter-row th {
+  position: sticky;
+  top: 33px; /* sits just below the header row */
+  z-index: 5;
+  padding: 4px 6px;
+  background: rgba(12, 12, 16, 0.97);
+  border-bottom: 1px solid var(--line-soft);
+}
+.screener-table thead tr.filter-row .fr-range { display: flex; gap: 4px; }
+.screener-table thead tr.filter-row .fr-input {
+  width: 100%;
+  min-width: 54px;
+  padding: 2px 5px;
+  background: rgba(10, 10, 14, 0.85);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  outline: none;
+}
+.screener-table thead tr.filter-row .fr-input:focus {
+  border-color: var(--cyan);
+  box-shadow: 0 0 0 1px rgba(0, 240, 255, 0.4);
+}
+.screener-table thead tr.filter-row .fr-range .fr-input { min-width: 44px; }
+
+/* Heatmap cells: keep text legible above the low-alpha wash. */
+.screener-table tbody td.heat-cell { color: var(--text); }
 
 /* ---- Body cells ---- */
 .screener-table tbody td {
@@ -103,3 +213,80 @@
   font-size: 10px;
   text-align: right;
 }
+
+/* ====================================================================== */
+/* Summary-stat footer (renders into #summary-footer)                     */
+/* ====================================================================== */
+.summary-wrap {
+  padding: 6px 10px 8px;
+}
+.summary-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  margin-bottom: 5px;
+}
+.summary-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.summary-select {
+  padding: 2px 6px;
+  background: rgba(10, 10, 14, 0.85);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  cursor: pointer;
+  outline: none;
+}
+.summary-select:focus { border-color: var(--cyan); box-shadow: 0 0 0 1px rgba(0, 240, 255, 0.4); }
+
+.summary-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: max-content;
+  min-width: 100%;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
+}
+.summary-table thead th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  padding: 3px 10px;
+  background: rgba(12, 12, 16, 0.97);
+  border-bottom: 1px solid rgba(176, 38, 255, 0.35);
+  color: var(--muted);
+  font-size: 9px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  text-align: left;
+  white-space: nowrap;
+}
+.summary-table th.num,
+.summary-table td.num { text-align: right; }
+.summary-table tbody td {
+  padding: 2px 10px;
+  border-bottom: 1px solid var(--line-soft);
+  color: var(--text);
+  white-space: nowrap;
+}
+.summary-table .summary-stat-name {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: rgba(12, 12, 16, 0.97);
+  color: var(--purple);
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-align: left;
+}
+.summary-table tbody td.is-null { color: #44444c; }
+.summary-table tbody tr:hover td { background-color: rgba(176, 38, 255, 0.06); }
