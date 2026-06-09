@@ -133,9 +133,16 @@ function createStore() {
     // Switch market: set it, clear sort/offset (columns get reset by app.js
     // via the default-columns helper it passes in), then run.
     setMarket(marketId, defaultColumns) {
+      // A market switch is a fresh canvas. Filters, factor models, computed and
+      // stat columns reference fields that may not exist in the new market, so
+      // clear the scan to avoid empty results from carried-over conditions.
       state.market = marketId;
       state.offset = 0;
       state.sort = [];
+      state.filters = [];
+      state.factor = null;
+      state.computed = [];
+      state.stats = [];
       if (Array.isArray(defaultColumns)) state.columns = defaultColumns.slice();
       notify();
       return store.runScreen();
