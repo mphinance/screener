@@ -73,83 +73,111 @@
 #status-bar .dot.err { background: var(--pink); box-shadow: 0 0 8px var(--pink); }
 @keyframes pulse { 50% { opacity: 0.35; } }
 
-/* ---- Left rail ---- */
+/* ---- Left rail (tabbed: one tool at a time, full height) ---- */
 #left-rail {
   grid-area: rail;
   display: flex;
   flex-direction: column;
-  gap: var(--sp-3);
-  padding: var(--sp-3);
-  overflow-y: auto;
+  padding: 0;
+  overflow: hidden;
+  min-height: 0;
   border-right: 1px solid var(--line);
   background: linear-gradient(180deg, rgba(18, 18, 22, 0.5), rgba(10, 10, 12, 0.5));
 }
 
-.rail-section {
-  background: var(--glass);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-  border: 1px solid var(--border-glass);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-soft);
-  overflow: hidden;
-  /* Keep natural height so the rail overflows and scrolls, instead of the
-   * sections being squashed by flexbox and clipping their content. */
+/* Tab strip, built by panels.js from the section titles. */
+.rail-tabs {
   flex: 0 0 auto;
-}
-.rail-section > .rail-head {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  justify-content: space-between;
-  gap: var(--sp-2);
-  padding: var(--sp-2) var(--sp-3);
-  border-bottom: 1px solid var(--line-soft);
-  cursor: pointer;
-  user-select: none;
-  transition: background 0.15s ease;
+  gap: 3px;
+  padding: var(--sp-2);
+  border-bottom: 1px solid var(--line);
 }
-.rail-section > .rail-head:hover { background: rgba(0, 240, 255, 0.05); }
-.rail-section > .rail-head .rail-title {
+.rail-tab {
+  flex: 1 1 auto;
+  text-align: center;
   font-family: var(--font-mono);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  color: var(--text);
-}
-/* Collapse chevron, injected by panels.js into each head. */
-.rail-section > .rail-head .rail-chevron {
-  color: var(--muted);
   font-size: 10px;
-  transition: transform 0.18s ease, color 0.15s ease;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  padding: 6px 5px;
+  color: var(--muted);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
 }
-.rail-section > .rail-head:hover .rail-chevron { color: var(--cyan); }
-.rail-section.collapsed > .rail-head .rail-chevron { transform: rotate(-90deg); }
-.rail-section > .rail-body {
-  padding: var(--sp-3);
-  /* Each panel body scrolls internally so a long list (presets) stays
-   * reachable without making the whole rail enormous. */
-  max-height: 46vh;
-  overflow-y: auto;
+.rail-tab:hover { color: var(--text); background: rgba(255, 255, 255, 0.04); }
+.rail-tab.active {
+  color: var(--cyan);
+  border-color: rgba(0, 240, 255, 0.5);
+  background: rgba(0, 240, 255, 0.08);
+  box-shadow: var(--glow-cyan);
 }
-.rail-section.collapsed > .rail-body { display: none; }
+/* Hide-rail button sits at the end of the tab strip. */
+.rail-hide {
+  flex: 0 0 auto;
+  width: 24px;
+  padding: 6px 0;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--muted);
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: color 0.15s ease, background 0.15s ease;
+}
+.rail-hide:hover { color: var(--cyan); background: rgba(0, 240, 255, 0.08); }
 
-/* ---- Rail resize handle (drag the right edge to set --rail-w) ---- */
-#rail-resize {
+/* Each section is now a pane. Only the active one shows, and it fills the
+ * remaining rail height with its own internal scroll. */
+.rail-section {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: none;
+  flex-direction: column;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+}
+.rail-section.active { display: flex; }
+.rail-section > .rail-head { display: none; }
+.rail-section > .rail-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--sp-3);
+}
+
+/* Hidden rail: collapse the grid column and show a thin reveal strip. */
+#app.rail-hidden { grid-template-columns: 0 1fr; }
+#app.rail-hidden #left-rail { display: none; }
+#rail-reveal {
   position: fixed;
   top: var(--topbar-h);
   bottom: var(--footer-h);
-  left: var(--rail-w);
-  width: 6px;
-  margin-left: -3px;
-  cursor: col-resize;
+  left: 0;
+  width: 16px;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
   z-index: 20;
-  background: transparent;
-  transition: background 0.15s ease;
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  background: var(--glass);
+  border-right: 1px solid var(--line);
+  transition: color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
 }
-#rail-resize:hover,
-#rail-resize.dragging { background: rgba(0, 240, 255, 0.35); box-shadow: 0 0 10px rgba(0, 240, 255, 0.5); }
-body.rail-resizing { cursor: col-resize; user-select: none; }
+#rail-reveal:hover { color: var(--cyan); background: rgba(0, 240, 255, 0.1); box-shadow: 0 0 12px rgba(0, 240, 255, 0.4); }
+#app.rail-hidden #rail-reveal { display: flex; }
 
 /* ---- Main panel ---- */
 #main-panel {

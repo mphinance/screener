@@ -591,7 +591,7 @@
   {
     "id": 57,
     "category": "frontend",
-    "description": "Collapsible rail panels: click a section header to collapse/expand, persisted to localStorage",
+    "description": "Tabbed left rail: Presets/Filters/Columns/Factor/Saved as tabs, one tool at a time full height, no scroll-past, active tab persisted",
     "steps": [
       "click header",
       "assert body hidden",
@@ -603,7 +603,7 @@
   {
     "id": 58,
     "category": "frontend",
-    "description": "Resizable left rail: drag the right edge to set width, double-click resets, persisted",
+    "description": "Hideable rail: hide button, backslash key, and edge reveal strip toggle the rail for full-table mode, state persisted",
     "steps": [
       "drag handle",
       "assert --rail-w changes",
