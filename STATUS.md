@@ -43,6 +43,18 @@ across 6 markets. The differentiator is the analytics layer on top of the raw sc
 - **Wave 5** Polish: removed every em dash from source, reduced backdrop-blur radii for snappier
   paint, verified loading/empty/error states.
 - **Wave 6** Final verify, README with fresh screenshots, this status doc.
+- **Wave 10** MCP server. Exposed the live screen engine over the Model Context Protocol with
+  `fastmcp`. Factored the screen pipeline out of `app.py` into `backend/pipeline.py` so the HTTP
+  API and MCP server run byte-identical logic (no behavior change, full suite still green). Ten
+  tools (`screen`, `run_preset`, `run_factor_preset`, `search_fields`, `list_operators`,
+  `list_presets`, `list_factor_presets`, `list_markets`, `lookup_symbol`, `server_stats`), three
+  resources (fields, presets, operators), a TTL cache and a self-stats tool for resilience under
+  bursty agent use. Cross-field filters (golden cross etc.) work through the tool unchanged.
+  Verified live in-memory: mega-cap RSI screen with a computed column, z-score, and factor rank
+  all returned real rows. 12 new tests (10 offline wiring + error paths, 2 live). README now has a
+  "versus the TradingView web screener" section. Research agent surveyed four existing TradingView
+  MCP servers (all MIT) to shape the tool set; charts and a Pine-script converter are queued next.
+
 - **Wave 7** Signals pack (parallel x3, probe-gated): SIGNALS preset group (golden/death cross,
   Stacked EMA Fibonacci ribbon on real 8/21/34/55/89, gap and go, breakouts, above/below all MAs),
   multi-timeframe columns (1D/1W/1M/1H/4H side by side), drag-and-drop column reorder. Fixed the

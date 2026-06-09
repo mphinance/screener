@@ -9,6 +9,10 @@ no-auth delayed data across stocks, crypto, forex, futures, bonds, and CFDs. Fil
 stakes. The point of this build is everything you do to the data *after* it lands: computed
 columns, factor scoring, in-result statistics, multi-key sort, client-side analytics.
 
+Drive it from the browser, from the HTTP API, or from an AI agent: the same engine is exposed
+over the **Model Context Protocol**, so Claude can screen, score, and rank markets for you in
+plain language. See [MCP server](#mcp-server-screen-from-an-agent) below.
+
 ![Power on](docs/boot.gif)
 
 *Every load powers on like an 80s mainframe.*
@@ -75,10 +79,68 @@ Hit `\` for full-table mode: the rail folds away and the factor-ranked table tak
 - Row detail drawer with a performance sparkline. Saved screens and a watchlist (localStorage).
   CSV export. Auto-refresh. Command palette (Ctrl-K) and full keyboard navigation.
 
+## Versus the TradingView web screener
+
+Their web screener filters a single market into a flat table. This does that, then keeps going
+with things their screener simply does not offer:
+
+- **Math on the result, not just filters.** Define computed columns with a real expression engine
+  (`(high-low)/close*100`, `close/sma50`, `volume*close`) and rank by them. The web screener has
+  no formula columns.
+- **Composite factor scoring.** Blend any set of fields into one direction-aware weighted z-score
+  and sort the market by it. There is no factor model in the web tool.
+- **In-result statistics.** `zscore`, `pctrank`, `rank`, and `norm` computed across the returned
+  set, so you see where each row sits inside *your* screen, not the whole universe.
+- **True multi-key sort.** Primary, secondary, and tertiary keys with priority badges, not one
+  sort column.
+- **One field universe, six markets, one switch.** Stocks, crypto, forex, futures, bonds, and CFDs
+  from the same surface. The web screener makes you pick a context up front.
+- **The full field catalog, searchable.** ~190 curated friendly-labelled fields lead and every
+  other queryable field (1000+) is reachable, probed live so none of them error.
+- **Yours to script.** An open HTTP API and an MCP server. You can wire it into an agent, a
+  notebook, or a cron. Their screener is a closed web page.
+- **No account, no login, no upsell.** Live delayed data with nothing to sign up for.
+
+## MCP server (screen from an agent)
+
+The same live screen engine is exposed over the [Model Context Protocol](https://modelcontextprotocol.io),
+so an AI agent can drive it directly. Built on [`fastmcp`](https://github.com/jlowin/fastmcp), it
+reuses the exact pipeline the web app uses, so a screen behaves identically no matter who runs it.
+
+Tools: `screen` (the full engine: filters, computed columns, stats, factor scoring, sort),
+`run_preset`, `run_factor_preset`, `search_fields`, `list_operators`, `list_presets`,
+`list_factor_presets`, `list_markets`, `lookup_symbol`, and `server_stats`. Cross-field filters
+work out of the box, so `{"field":"SMA50","op":"crosses_above","value":"SMA200"}` is a golden cross.
+The full field catalog, presets, and operator reference are also exposed as MCP resources.
+
+```bash
+python run_mcp.py              # stdio, for Claude Desktop / Claude Code
+python run_mcp.py --http 8765  # streamable-http for remote / multi-client
+```
+
+Register it with Claude Desktop (`claude_desktop_config.json`), using absolute paths:
+
+```json
+{
+  "mcpServers": {
+    "neon-screener": {
+      "command": "/abs/path/screener/.venv/bin/python",
+      "args": ["/abs/path/screener/run_mcp.py"]
+    }
+  }
+}
+```
+
+Then just ask: *"Screen US mega caps with RSI under 35, add a dollar-volume column, and rank them
+by my Value factor."* No TradingView account needed; data is live and delayed.
+
 ## Stack
 
 - **Backend:** FastAPI + uvicorn, a thin wrapper over `tradingview-screener` with an in-memory TTL
-  cache and a sandboxed analytics engine.
+  cache and a sandboxed analytics engine. Screen pipeline factored into `backend/pipeline.py` and
+  shared by the HTTP API and the MCP server.
+- **MCP:** `fastmcp` server in `backend/mcp_server.py` exposing the screen engine as tools and the
+  catalogs as resources. stdio or streamable-http.
 - **Frontend:** Vanilla JS ES modules and hand-rolled synthwave CSS. No build step.
 
 ## Run it
@@ -94,11 +156,13 @@ pass TradingView cookies through to `get_scanner_data`.
 ## Layout
 
 ```
-backend/      FastAPI app, screener service, analytics engine, field catalog, presets, cache
+backend/      FastAPI app, screen pipeline, screener service, analytics, field catalog, presets, cache
+              + mcp_server.py (the same engine over MCP)
 frontend/     index.html, css/, js/ feature modules (filters, columns, presets, factor, table, ...)
 docs/         screenshots + capture.py (headless Playwright screenshotter)
 run.py        launches uvicorn on 127.0.0.1:8000
-tests/        pytest: analytics math + a live API smoke
+run_mcp.py    launches the MCP server (stdio, or --http PORT)
+tests/        pytest: analytics math, MCP wiring, + live API smoke
 ```
 
 ## Tests

@@ -134,6 +134,8 @@
 .dtl-chg.dtl-pos { color: var(--green); }
 .dtl-chg.dtl-neg { color: var(--pink); }
 
+.dtl-openin { margin-top: var(--sp-3); }
+
 .dtl-spark {
   padding: var(--sp-3) var(--sp-4);
   border-bottom: 1px solid var(--line-soft);
@@ -489,6 +491,16 @@
       priceRow.appendChild(c);
     }
     if (priceRow.childNodes.length) head.appendChild(priceRow);
+
+    // ---- Open in TradingView. A single link straight to the live chart.
+    const openIn = window.Screener && window.Screener.openIn;
+    if (openIn && openIn.mountButton) {
+      const oiHost = document.createElement('div');
+      oiHost.className = 'dtl-openin';
+      head.appendChild(oiHost);
+      openIn.mountButton(oiHost, row);
+    }
+
     drawerEl.appendChild(head);
 
     // ---- Sparkline. Prefer supplied points, else read from row, else

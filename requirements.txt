@@ -3,3 +3,4 @@ uvicorn[standard]>=0.27
 tradingview-screener>=3.0
 pandas>=2.0
 requests>=2.31
+fastmcp>=2.0
