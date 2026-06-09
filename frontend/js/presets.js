@@ -65,6 +65,33 @@ function injectStyles() {
     .pst-search:hover { border-color: rgba(0, 240, 255, 0.4); }
     .pst-search:focus { border-color: var(--cyan); box-shadow: var(--glow-cyan); }
     .pst-list { display: flex; flex-direction: column; gap: var(--sp-2); }
+    /* Group header inside a list, e.g. SIGNALS. Reads as a distinct neon band. */
+    .pst-group {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-2);
+      margin-top: 2px;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .pst-group::after {
+      content: '';
+      flex: 1 1 auto;
+      height: 1px;
+      background: var(--line);
+    }
+    /* The SIGNALS group leans neon green to stand apart from the plain scans. */
+    .pst-group.pst-group-signals {
+      color: var(--green, #39ff14);
+      text-shadow: 0 0 8px rgba(57, 255, 20, 0.45);
+    }
+    .pst-group.pst-group-signals::after {
+      background: rgba(57, 255, 20, 0.4);
+    }
     .pst-card {
       position: relative;
       display: flex;
@@ -240,7 +267,7 @@ window.Screener.registerModule('presets', (ctx) => {
     store.runScreen();
   }
 
-  for (const preset of presets) {
+  function buildPresetCard(preset) {
     const card = document.createElement('div');
     card.className = 'pst-card';
     card.setAttribute('role', 'button');
@@ -277,7 +304,36 @@ window.Screener.registerModule('presets', (ctx) => {
     });
 
     presetCards.set(preset.id, { card, preset });
-    scanList.appendChild(card);
+    return card;
+  }
+
+  // Bucket presets by their "group" key. Presets with no group fall into
+  // "Scans" so the ungrouped one-click scans keep their place. Groups render in
+  // first-seen order, each under its own neon section header. The header for a
+  // group hides when all of that group's cards are filtered out by search.
+  const GROUP_DEFAULT = 'Scans';
+  const groupOrder = [];
+  const groupBuckets = new Map(); // groupName -> [preset, ...]
+  for (const preset of presets) {
+    const g = preset.group || GROUP_DEFAULT;
+    if (!groupBuckets.has(g)) {
+      groupBuckets.set(g, []);
+      groupOrder.push(g);
+    }
+    groupBuckets.get(g).push(preset);
+  }
+
+  const groupHeaders = new Map(); // groupName -> header element
+  for (const g of groupOrder) {
+    const header = document.createElement('div');
+    header.className = 'pst-group';
+    if (g.toLowerCase() === 'signals') header.classList.add('pst-group-signals');
+    header.textContent = g;
+    scanList.appendChild(header);
+    groupHeaders.set(g, header);
+    for (const preset of groupBuckets.get(g)) {
+      scanList.appendChild(buildPresetCard(preset));
+    }
   }
 
   if (!presets.length) {
@@ -291,11 +347,20 @@ window.Screener.registerModule('presets', (ctx) => {
   function applyFilter() {
     const q = search.value.trim().toLowerCase();
     let shown = 0;
+    const groupShown = new Map(); // groupName -> visible count
     for (const { card, preset } of presetCards.values()) {
       const hay = ((preset.name || '') + ' ' + (preset.description || '')).toLowerCase();
       const match = !q || hay.includes(q);
       card.classList.toggle('hidden', !match);
-      if (match) shown += 1;
+      if (match) {
+        shown += 1;
+        const g = preset.group || GROUP_DEFAULT;
+        groupShown.set(g, (groupShown.get(g) || 0) + 1);
+      }
+    }
+    // Hide a group header when none of its cards survive the search filter.
+    for (const [g, header] of groupHeaders.entries()) {
+      header.classList.toggle('hidden', (groupShown.get(g) || 0) === 0);
     }
     scanCount.textContent = q ? `${shown}/${presets.length}` : String(presets.length);
   }
