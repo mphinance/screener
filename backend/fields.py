@@ -271,9 +271,20 @@ FIELDS: list[dict] = (
 field_index: dict[str, dict] = {f["id"]: f for f in FIELDS}
 
 
+# Timeframe suffixes the upstream scanner accepts on price and technical fields,
+# e.g. "RSI|1W", "close|60". All probed live and confirmed to return data.
+TIMEFRAME_SUFFIXES: set[str] = {"1", "5", "15", "30", "60", "120", "240", "1W", "1M"}
+
+
 def validate_field(field_id: str) -> bool:
-    """Return True when field_id exists in the catalog."""
-    return field_id in field_index
+    """Return True when field_id is a catalog field, or a catalog field carrying
+    a known timeframe suffix like "RSI|1W"."""
+    if field_id in field_index:
+        return True
+    if "|" in field_id:
+        base, _, suffix = field_id.partition("|")
+        return base in field_index and suffix in TIMEFRAME_SUFFIXES
+    return False
 
 
 # Sensible default columns per market kind. Stocks get fundamentals,
