@@ -20,6 +20,24 @@
 // Exports TableView (the stateful view) and renderTable (one-shot convenience).
 
 import { formatValue, isNumericType, signClass } from './format.js';
+import store from './state.js';
+
+// Inject the small set of drag-and-drop styles this module needs. table.css is
+// not in our lane, so header drag visuals live here. Reuses theme.css vars.
+const DRAGDROP_STYLE = `
+.screener-table thead th[draggable="true"] { cursor: grab; }
+.screener-table thead th.th-dragging { opacity: 0.45; cursor: grabbing; }
+.screener-table thead th.th-drop-before { box-shadow: inset 2px 0 0 0 var(--cyan); }
+.screener-table thead th.th-drop-after { box-shadow: inset -2px 0 0 0 var(--cyan); }
+`;
+function injectDragDropStyles() {
+  if (typeof document === 'undefined') return;
+  if (document.getElementById('dragdrop-styles')) return;
+  const tag = document.createElement('style');
+  tag.id = 'dragdrop-styles';
+  tag.textContent = DRAGDROP_STYLE;
+  document.head.appendChild(tag);
+}
 
 // Columns we never want to show as their own cell. The backend always returns
 // "ticker" (exchange-prefixed) first; we surface "name" as the primary symbol
@@ -122,8 +140,13 @@ function emptyCard(result) {
 // the referenced columns still exist.
 export class TableView {
   constructor(container, fieldsIndex) {
+    injectDragDropStyles();
     this.container = container;
     this.fieldsIndex = fieldsIndex || {};
+
+    // Set true on a header dragstart, cleared after the click that follows a
+    // drop fires. Lets _onHeaderClick tell a reorder-drag from a sort-click.
+    this._didReorderDrag = false;
 
     // ---- View state (single source of truth for the powers) ----
     this.result = null;                // last result object {count, rows, columns, meta}
@@ -234,7 +257,30 @@ export class TableView {
 
   // ---- Sort interaction: plain click cycles a single key asc->desc->none.
   //      Shift-click adds / advances a secondary/tertiary key. ----
+  // Reorder the screen's columns by drag: move draggedId before/after targetId,
+  // write the new order to the store, and rerun. Reorders only, never removes,
+  // so 'name' survives. No-op when the order is unchanged.
+  _reorderColumns(draggedId, targetId, after) {
+    const cols = store.state.columns.slice();
+    const from = cols.indexOf(draggedId);
+    if (from < 0 || draggedId === targetId) return;
+    cols.splice(from, 1);
+    const t = cols.indexOf(targetId);
+    if (t < 0) return;
+    const insertAt = after ? t + 1 : t;
+    cols.splice(insertAt, 0, draggedId);
+    if (cols.join('') === store.state.columns.join('')) return;
+    store.set({ columns: cols });
+    store.runScreen();
+  }
+
   _onHeaderClick(colId, shiftKey) {
+    // A reorder drag ends with a synthetic click on some browsers. Swallow that
+    // one click so a drag never triggers a sort.
+    if (this._didReorderDrag) {
+      this._didReorderDrag = false;
+      return;
+    }
     const existingIdx = this.sortKeys.findIndex((k) => k.col === colId);
     if (shiftKey) {
       if (existingIdx === -1) {
@@ -389,6 +435,41 @@ export class TableView {
         th.appendChild(heat);
       }
 
+      // Drag-and-drop reorder. Dragging the th body reorders columns; a plain
+      // click still sorts (the dragstart sets a flag the click handler honors).
+      // We only enable dragging when there is more than one column to move.
+      if (this.columns.length > 1) {
+        th.draggable = true;
+        th.addEventListener('dragstart', (e) => {
+          this._didReorderDrag = true;
+          e.dataTransfer.effectAllowed = 'move';
+          e.dataTransfer.setData('text/plain', colId);
+          th.classList.add('th-dragging');
+        });
+        th.addEventListener('dragend', () => {
+          th.classList.remove('th-dragging');
+          this._clearHeaderDropMarks();
+        });
+        th.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'move';
+          const before = this._isBeforeHalfX(e, th);
+          this._clearHeaderDropMarks();
+          th.classList.add(before ? 'th-drop-before' : 'th-drop-after');
+        });
+        th.addEventListener('dragleave', () => {
+          th.classList.remove('th-drop-before', 'th-drop-after');
+        });
+        th.addEventListener('drop', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const draggedId = e.dataTransfer.getData('text/plain');
+          const after = !this._isBeforeHalfX(e, th);
+          this._clearHeaderDropMarks();
+          if (draggedId) this._reorderColumns(draggedId, colId, after);
+        });
+      }
+
       th.addEventListener('click', (e) => this._onHeaderClick(colId, e.shiftKey));
       // Right-click a header is a fast heatmap toggle for numeric columns.
       th.addEventListener('contextmenu', (e) => {
@@ -402,6 +483,20 @@ export class TableView {
 
     if (this.filterRowOpen) thead.appendChild(this._buildFilterRow());
     return thead;
+  }
+
+  // Clear column drop indicators across the header row.
+  _clearHeaderDropMarks() {
+    if (!this.container) return;
+    this.container.querySelectorAll('.th-drop-before, .th-drop-after').forEach((n) => {
+      n.classList.remove('th-drop-before', 'th-drop-after');
+    });
+  }
+
+  // Is the pointer in the left half of the th (drop before) vs right (after)?
+  _isBeforeHalfX(e, th) {
+    const rect = th.getBoundingClientRect();
+    return (e.clientX - rect.left) < rect.width / 2;
   }
 
   _buildFilterRow() {
@@ -465,21 +560,45 @@ export class TableView {
     return ranges;
   }
 
-  // Map a value in [min,max] to a low-alpha gradient: pink (low) -> neutral ->
-  // green (high). Keeps text legible by capping alpha.
+  // Map a value in [min,max] to a visible gradient: neon pink (low) through a
+  // dim neutral (mid) to neon green (high). Every cell is clearly tinted: alpha
+  // floors at ~0.18 at the midpoint and rises to ~0.42 at the extremes, so the
+  // heatmap reads across the whole column while text stays legible.
   _heatColor(value, min, max) {
-    if (max === min) return 'rgba(176, 38, 255, 0.10)'; // flat column: neutral purple wash
-    const t = (value - min) / (max - min); // 0..1
-    const alpha = 0.30;
+    // Flat column (or single row): uniform faint neutral, no divide by zero.
+    if (max === min) return 'rgba(176, 38, 255, 0.18)';
+
+    let t = (value - min) / (max - min); // 0..1
+    if (t < 0) t = 0;
+    else if (t > 1) t = 1;
+
+    // Alpha: floor 0.18 at the midpoint, up to 0.42 at either extreme.
+    const A_MID = 0.18;
+    const A_EDGE = 0.42;
+    const edge = Math.abs(t - 0.5) / 0.5; // 0 at mid, 1 at extremes
+    const alpha = A_MID + (A_EDGE - A_MID) * edge;
+
+    // Endpoint colors. The neutral mid sits between them so the hue eases
+    // through a dim grey rather than snapping pink-to-green.
+    const PINK = [255, 0, 60];
+    const NEUTRAL = [140, 140, 150];
+    const GREEN = [0, 255, 136];
+
+    let r;
+    let g;
+    let b;
     if (t < 0.5) {
-      // pink -> neutral
-      const k = t / 0.5; // 0 at low, 1 at mid
-      const a = alpha * (1 - k);
-      return `rgba(255, 0, 60, ${a.toFixed(3)})`;
+      const k = t / 0.5; // pink -> neutral
+      r = Math.round(PINK[0] + (NEUTRAL[0] - PINK[0]) * k);
+      g = Math.round(PINK[1] + (NEUTRAL[1] - PINK[1]) * k);
+      b = Math.round(PINK[2] + (NEUTRAL[2] - PINK[2]) * k);
+    } else {
+      const k = (t - 0.5) / 0.5; // neutral -> green
+      r = Math.round(NEUTRAL[0] + (GREEN[0] - NEUTRAL[0]) * k);
+      g = Math.round(NEUTRAL[1] + (GREEN[1] - NEUTRAL[1]) * k);
+      b = Math.round(NEUTRAL[2] + (GREEN[2] - NEUTRAL[2]) * k);
     }
-    const k = (t - 0.5) / 0.5; // 0 at mid, 1 at high
-    const a = alpha * k;
-    return `rgba(0, 255, 136, ${a.toFixed(3)})`;
+    return `rgba(${r}, ${g}, ${b}, ${alpha.toFixed(3)})`;
   }
 
   _buildBody(rows) {

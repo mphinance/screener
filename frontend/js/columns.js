@@ -43,6 +43,11 @@ const STYLE = `
 }
 .col-chip-row:hover { border-color: rgba(0, 240, 255, 0.4); }
 .col-chip-row.col-locked { opacity: 0.7; }
+.col-chip-row[draggable="true"] { cursor: grab; }
+.col-chip-row.col-dragging { opacity: 0.4; cursor: grabbing; border-color: var(--cyan); }
+.col-chip-row.col-drop-before { box-shadow: inset 0 2px 0 0 var(--cyan), var(--glow-cyan); }
+.col-chip-row.col-drop-after { box-shadow: inset 0 -2px 0 0 var(--cyan), var(--glow-cyan); }
+.col-chip-grip { font-family: var(--font-mono); font-size: 11px; color: var(--muted); flex: 0 0 auto; cursor: grab; user-select: none; }
 .col-chip-id { font-family: var(--font-mono); font-size: 11px; color: var(--cyan); flex: 0 0 auto; }
 .col-chip-label { font-size: 11px; color: var(--muted); flex: 1 1 auto; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .col-iconbtn {
@@ -220,6 +225,29 @@ window.Screener.registerModule('columns', (ctx) => {
     setColumns(cols);
   }
 
+  // Reorder by drag-and-drop: move draggedId so it lands just before targetId
+  // (or to the very end when targetId is null). Reorders only, never removes,
+  // so 'name' (or any column) is preserved. Reruns the screen on a real change.
+  function reorderColumn(draggedId, targetId, after) {
+    const cols = store.state.columns.slice();
+    const from = cols.indexOf(draggedId);
+    if (from < 0 || draggedId === targetId) return;
+    cols.splice(from, 1);
+    let insertAt;
+    if (targetId == null) {
+      insertAt = cols.length;
+    } else {
+      const t = cols.indexOf(targetId);
+      if (t < 0) return;
+      insertAt = after ? t + 1 : t;
+    }
+    cols.splice(insertAt, 0, draggedId);
+    // No-op guard: identical order means no rerun.
+    if (cols.join('') === store.state.columns.join('')) return;
+    setColumns(cols);
+    store.runScreen();
+  }
+
   // Detect bare field ids referenced by a computed expression and auto-add any
   // that are not already selected, so the backend has the raw value to compute
   // on. We only add ids that EXACTLY match a known catalog field, so a token
@@ -289,6 +317,19 @@ window.Screener.registerModule('columns', (ctx) => {
 
   // ---- Renderers. Driven by store state; idempotent.
 
+  // Clear any drop indicators across the selected list.
+  function clearDropMarks() {
+    els.selected.querySelectorAll('.col-drop-before, .col-drop-after').forEach((n) => {
+      n.classList.remove('col-drop-before', 'col-drop-after');
+    });
+  }
+
+  // Is the pointer in the top half of the row (drop before) vs bottom (after)?
+  function isBeforeHalf(e, row) {
+    const rect = row.getBoundingClientRect();
+    return (e.clientY - rect.top) < rect.height / 2;
+  }
+
   function renderSelected() {
     const cols = store.state.columns;
     els.count.textContent = String(cols.length);
@@ -298,6 +339,45 @@ window.Screener.registerModule('columns', (ctx) => {
       const locked = cols.length === 1 && id === 'name';
       const row = document.createElement('div');
       row.className = 'col-chip-row' + (locked ? ' col-locked' : '');
+      row.dataset.col = id;
+
+      // Drag-and-drop reorder. A locked single 'name' chip cannot move anywhere
+      // useful, so we only enable dragging when there is more than one column.
+      if (cols.length > 1) {
+        row.draggable = true;
+        row.addEventListener('dragstart', (e) => {
+          e.dataTransfer.effectAllowed = 'move';
+          e.dataTransfer.setData('text/plain', id);
+          row.classList.add('col-dragging');
+        });
+        row.addEventListener('dragend', () => {
+          row.classList.remove('col-dragging');
+          clearDropMarks();
+        });
+        row.addEventListener('dragover', (e) => {
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'move';
+          const before = isBeforeHalf(e, row);
+          clearDropMarks();
+          row.classList.add(before ? 'col-drop-before' : 'col-drop-after');
+        });
+        row.addEventListener('dragleave', () => {
+          row.classList.remove('col-drop-before', 'col-drop-after');
+        });
+        row.addEventListener('drop', (e) => {
+          e.preventDefault();
+          const draggedId = e.dataTransfer.getData('text/plain');
+          const after = !isBeforeHalf(e, row);
+          clearDropMarks();
+          if (draggedId) reorderColumn(draggedId, id, after);
+        });
+      }
+
+      const grip = document.createElement('span');
+      grip.className = 'col-chip-grip';
+      grip.textContent = '⠿';
+      grip.title = 'Drag to reorder';
+      row.appendChild(grip);
 
       const idEl = document.createElement('span');
       idEl.className = 'col-chip-id';
