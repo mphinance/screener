@@ -544,5 +544,36 @@
       "assert pink-to-green ramp"
     ],
     "passes": true
+  },
+  {
+    "id": 53,
+    "category": "analytics",
+    "description": "Momentum signal group: MACD/Stoch/StochRSI/RSI/AO/CCI crosses return rows with indicator columns",
+    "steps": [
+      "apply MACD Bull Cross",
+      "assert count>0",
+      "assert MACD.hist column"
+    ],
+    "passes": true
+  },
+  {
+    "id": 54,
+    "category": "analytics",
+    "description": "Trend signal group: VWAP reclaim, EMA8/21 cross, ADX trend, Parabolic SAR, Williams R, TV Strong Buy",
+    "steps": [
+      "apply trend presets",
+      "assert rows + indicator cols"
+    ],
+    "passes": true
+  },
+  {
+    "id": 55,
+    "category": "analytics",
+    "description": "Multi-timeframe alignment presets (Triple Screen, daily+weekly MACD) display suffixed columns side by side",
+    "steps": [
+      "apply MACD Daily and Weekly Bull",
+      "assert MACD.macd|1W column with real value"
+    ],
+    "passes": true
   }
 ]

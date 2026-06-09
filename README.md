@@ -38,10 +38,15 @@ columns, factor scoring, in-result statistics, multi-key sort, client-side analy
 
 ![Signals and timeframes](docs/signals.png)
 
-- **Signal presets.** A SIGNALS group of one-click technical scans: Golden Cross and Death Cross
-  (`SMA50` crossing `SMA200`), Above / Below All MAs, Gap and Go, Volume Breakout, and the
-  **Stacked EMA Ribbon** on the real Fibonacci periods `close > EMA8 > EMA21 > EMA34 > EMA55 > EMA89`
-  (1,941 names live, no faked periods, every EMA is an actual scanner field).
+- **Signal presets.** Grouped one-click technical scans across SIGNALS, MOMENTUM, TREND, and
+  MULTI-TIMEFRAME. Golden / Death Cross, Above / Below All MAs, Gap and Go, Volume Breakout, the
+  **Stacked EMA Ribbon** on the real Fibonacci periods `close > EMA8 > EMA21 > EMA34 > EMA55 > EMA89`,
+  plus MACD bull/bear cross, Stochastic and Stoch RSI crosses, RSI-reclaims-50, Awesome Oscillator
+  zero cross, CCI reversal, VWAP reclaim, EMA 8/21 flip, ADX strong-trend, Parabolic SAR, Williams
+  %R, and TradingView's own Strong Buy rating. No faked periods, every field is an actual scanner field.
+- **Multi-timeframe signals.** The kind that only became possible once the field universe was
+  confirmed: Triple Screen Bull / Bear (RSI aligned above or below 50 on daily, weekly, and monthly
+  at once) and MACD aligned bullish on both daily and weekly.
 - **Multi-timeframe columns.** Toggle 1D / 1W / 1M / 1H / 4H and any technical column gets its
   suffixed siblings added alongside, so you can read `RSI`, `RSI|1W`, and `RSI|1M` side by side.
   Fundamentals are never suffixed.
@@ -54,7 +59,7 @@ columns, factor scoring, in-result statistics, multi-key sort, client-side analy
   `above_pct`, `like`, and more, with AND / OR grouping.
 - Multi-market switcher: US stocks, crypto, forex, futures, bonds, CFDs. A market switch is a fresh
   canvas.
-- 30 one-click preset scans (top gainers, unusual volume, RSI extremes, 52-week highs, the signal
+- 47 one-click preset scans (top gainers, unusual volume, RSI extremes, 52-week highs, the signal
   pack above, dividend aristocrats, crypto movers, and more).
 - Column picker over a 172-field catalog, grouped and searchable.
 - Row detail drawer with a performance sparkline. Saved screens and a watchlist (localStorage).

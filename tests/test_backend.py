@@ -40,10 +40,22 @@ def test_presets_count():
 
 
 def test_preset_fields_are_real():
-    # Every column referenced by a preset must be in the catalog.
+    # Every column referenced by a preset must be a catalog field, or a catalog
+    # field carrying a valid timeframe suffix (e.g. RSI|1W on the MTF presets).
     for p in PRESETS:
         for c in p["columns"]:
-            assert c in field_index, f"{p['id']} uses unknown column {c}"
+            assert validate_field(c), f"{p['id']} uses unknown column {c}"
+
+
+def test_preset_filter_fields_are_real():
+    # Filter fields and any field-id values must validate too, so a typo in a
+    # signal preset cannot silently return nothing.
+    for p in PRESETS:
+        for flt in p.get("filters", []):
+            assert validate_field(flt["field"]), f"{p['id']} filters unknown field {flt['field']}"
+            val = flt.get("value")
+            if isinstance(val, str):
+                assert validate_field(val), f"{p['id']} compares against unknown field {val}"
 
 
 # --- safe_eval sandbox ---------------------------------------------------
