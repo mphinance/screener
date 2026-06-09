@@ -262,7 +262,7 @@
       "assert sort badges",
       "assert row order"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": 26,
@@ -272,7 +272,7 @@
       "click header thrice",
       "assert order cycles"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": 27,
@@ -283,7 +283,7 @@
       "assert visible rows reduce",
       "assert no network call"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": 28,
@@ -293,7 +293,7 @@
       "set min on a numeric col",
       "assert rows filtered"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": 29,
@@ -304,7 +304,7 @@
       "apply client filter",
       "assert stats update"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": 30,
@@ -314,7 +314,7 @@
       "enable heatmap on a col",
       "assert cell bg gradient"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": 31,
@@ -323,7 +323,7 @@
     "steps": [
       "assert change col coloring matches sign"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": 32,
@@ -356,7 +356,7 @@
       "load saved",
       "assert config restored"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": 35,
@@ -367,7 +367,7 @@
       "open watchlist",
       "assert starred shown"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": 36,
@@ -377,7 +377,7 @@
       "click export",
       "assert csv downloaded with headers+rows"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": 37,
@@ -387,7 +387,7 @@
       "click row",
       "assert drawer with symbol detail"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": 38,
@@ -396,7 +396,7 @@
     "steps": [
       "assert sparkline svg present"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": 39,
@@ -406,7 +406,7 @@
       "enable auto-refresh",
       "assert refetch occurs"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": 40,
@@ -417,7 +417,7 @@
       "assert palette",
       "select action"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": 41,
@@ -427,7 +427,7 @@
       "press down arrow",
       "assert selection moves"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": 42,
