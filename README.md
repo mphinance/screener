@@ -9,6 +9,10 @@ no-auth delayed data across stocks, crypto, forex, futures, bonds, and CFDs. Fil
 stakes. The point of this build is everything you do to the data *after* it lands: computed
 columns, factor scoring, in-result statistics, multi-key sort, client-side analytics.
 
+![Power on](docs/boot.gif)
+
+*Every load powers on like an 80s mainframe.*
+
 ![Neon Screener](docs/hero.png)
 
 Hit `\` for full-table mode: the rail folds away and the factor-ranked table takes the whole screen.
