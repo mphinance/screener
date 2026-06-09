@@ -1,4 +1,4 @@
-// presets.js — the PRESET SCAN LIBRARY. Mounts in #preset-panel (left rail).
+// presets.js - the PRESET SCAN LIBRARY. Mounts in #preset-panel (left rail).
 // Two sections:
 //   PRESET SCANS   one-click scans from store.state.presets. A click writes the
 //                  preset config into the store and re-runs the screen.

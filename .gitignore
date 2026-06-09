@@ -9,6 +9,7 @@ env/
 Thumbs.db
 node_modules/
 *.log
+server.log
 .env
 secrets.env
 docs/screenshots/*.tmp.png

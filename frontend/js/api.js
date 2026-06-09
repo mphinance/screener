@@ -1,4 +1,4 @@
-// api.js — async wrappers over the backend REST API.
+// api.js - async wrappers over the backend REST API.
 // All functions return parsed JSON or throw an Error with a useful message.
 //
 // Backend contract (verified live):

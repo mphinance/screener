@@ -1,4 +1,4 @@
-// filters.js — the visual FILTER BUILDER module.
+// filters.js - the visual FILTER BUILDER module.
 //
 // Mounts in #filter-panel. Builds a dense synthwave filter builder: searchable
 // field picker, type-adaptive operator dropdown, operator-adaptive value area,

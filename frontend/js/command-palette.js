@@ -1,4 +1,4 @@
-// command-palette.js — Command palette (Ctrl/Cmd-K) + table keyboard nav.
+// command-palette.js - Command palette (Ctrl/Cmd-K) + table keyboard nav.
 //
 // Two features, one module:
 //

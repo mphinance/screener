@@ -1,4 +1,4 @@
-// store.test.mjs — headless logic tests for state.js + format.js.
+// store.test.mjs - headless logic tests for state.js + format.js.
 // Run with: node --test frontend/js/store.test.mjs
 //           (or plain: node frontend/js/store.test.mjs)
 //

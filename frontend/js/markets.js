@@ -1,4 +1,4 @@
-// markets.js — the MARKET SWITCHER. A neon segmented control that mounts in
+// markets.js - the MARKET SWITCHER. A neon segmented control that mounts in
 // #market-switcher, one pill per market from store.state.markets. Clicking a
 // pill switches the active market (and resets columns to a market-appropriate
 // default) then re-runs the screen. The active pill tracks store.state.market

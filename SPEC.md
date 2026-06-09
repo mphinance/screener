@@ -1,7 +1,7 @@
-# SPEC — NEON SCREENER
+# SPEC - NEON SCREENER
 
 > The most complete market screener of all time. A **quant analytics layer** on top of
-> TradingView's data — not a TradingView clone. Built in Michael Hanko's synthwave /
+> TradingView's data - not a TradingView clone. Built in Michael Hanko's synthwave /
 > TraderDaddy / Bloomberg-terminal aesthetic.
 
 ## Goal
@@ -16,7 +16,7 @@ optional cookie for real-time).
 - **Frontend:** Vanilla JS (ES modules) + hand-rolled synthwave CSS. **No build step.** Served as static files by FastAPI.
 - **Data:** `tradingview_screener.Query` → `(count, pandas.DataFrame)`. Markets: stocks (america + 70 countries), crypto, forex, futures, bonds, cfd, coin.
 
-## The "not a clone" pillar — analytics & math (FIRST CLASS)
+## The "not a clone" pillar - analytics & math (FIRST CLASS)
 This is what makes it ours, not TradingView's:
 1. **Computed columns / formula engine.** User defines derived columns with a safe expression
    language over existing fields, e.g. `(high-low)/close*100`, `close/sma50`, `volume*close`.
@@ -28,10 +28,10 @@ This is what makes it ours, not TradingView's:
 3. **Composite factor score.** Weighted multi-factor ranking: user assigns weights to N fields
    (each normalized by z-score, direction-aware), backend returns a `factor_score` column and
    ranks by it. Ships with presets (Momentum, Value, Quality, Growth, Low-Vol).
-4. **Multi-key sort.** Sort by column A asc, then B desc, then C — stable, client-side, with
+4. **Multi-key sort.** Sort by column A asc, then B desc, then C - stable, client-side, with
    visual sort-order badges.
 5. **Advanced client-side filtering.** On top of server results: per-column range sliders, quick
-   numeric/text filters, and derived-column filters — instant, no round-trip.
+   numeric/text filters, and derived-column filters - instant, no round-trip.
 6. **Summary-stat footer.** Per numeric column: count, mean, median, min, max, stdev, sum.
    Recomputes on filter.
 7. **Conditional formatting.** Heatmap gradient (neon green→pink) per column by value, z-score, or
@@ -55,7 +55,7 @@ This is what makes it ours, not TradingView's:
   cyan `#00f0ff`, pink `#ff003c`, green `#00ff88`, purple `#b026ff`. JetBrains Mono for ALL
   numbers/tickers/tables; Inter for UI. Glassmorphism + neon glow on interactives. Slight rounding (4-8px).
 - **NO em dashes anywhere** (code comments, UI copy, docs). Use periods/commas/"and".
-- **No markdown tables** in any `.md` deliverable meant for Substack — N/A here, plain docs fine.
+- **No markdown tables** in any `.md` deliverable meant for Substack - N/A here, plain docs fine.
 - High-density terminal layout. Monospace columns align.
 
 ## API contract (backend → frontend)

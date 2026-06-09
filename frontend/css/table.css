@@ -16,8 +16,8 @@
   top: 0;
   z-index: 5;
   background: rgba(14, 14, 18, 0.96);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
   border-bottom: 1px solid rgba(0, 240, 255, 0.35);
   border-right: 1px solid var(--line-soft);
   padding: 7px 10px;
@@ -96,8 +96,8 @@
   gap: var(--sp-2);
   padding: 6px 10px;
   background: rgba(14, 14, 18, 0.96);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
   border-bottom: 1px solid var(--line-soft);
 }
 .table-powerbar .tp-btn {

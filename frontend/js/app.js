@@ -1,4 +1,4 @@
-// app.js — bootstrap and the public module-registration contract.
+// app.js - bootstrap and the public module-registration contract.
 //
 // =====================================================================
 //  ARCHITECTURE CONTRACT (read this before adding a feature module)

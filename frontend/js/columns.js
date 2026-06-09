@@ -1,4 +1,4 @@
-// columns.js — the COLUMN PICKER + computed/stat column builder.
+// columns.js - the COLUMN PICKER + computed/stat column builder.
 //
 // Mounts in #column-panel. Manages three request arrays on the store:
 //   store.state.columns  ordered field ids (these get .select()'ed server-side)

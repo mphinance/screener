@@ -1,4 +1,4 @@
-// format.js — value formatters by field type.
+// format.js - value formatters by field type.
 // Pure functions, no DOM, no deps. Importable in Node for tests.
 //
 // Field types come from the backend catalog: "str", "int", "num", "pct",

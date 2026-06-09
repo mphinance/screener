@@ -1,4 +1,4 @@
-// state.js — central singleton store for the screener.
+// state.js - central singleton store for the screener.
 //
 // PUBLIC API (later feature modules depend on this exact surface):
 //   store.state                      live state object (read; never mutate directly)

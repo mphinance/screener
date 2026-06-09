@@ -436,7 +436,7 @@
     "steps": [
       "assert header shows count and ms"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": 43,
@@ -446,7 +446,7 @@
       "trigger each state",
       "assert in-theme rendering"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": 44,
@@ -456,7 +456,7 @@
       "grep for em dash char",
       "assert none"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": 45,
@@ -466,7 +466,7 @@
       "visual review",
       "assert glass + glow present"
     ],
-    "passes": false
+    "passes": true
   },
   {
     "id": 46,
@@ -476,6 +476,6 @@
       "assert README has run steps",
       "assert screenshot embedded"
     ],
-    "passes": false
+    "passes": true
   }
 ]
