@@ -10,9 +10,38 @@ from __future__ import annotations
 import math
 from typing import Any
 
-from tradingview_screener import Query, col
+from tradingview_screener import (
+    Query,
+    bond,
+    cfd,
+    col,
+    crypto,
+    forex,
+    futures,
+    stocks,
+)
 
 from .fields import default_columns, validate_field
+
+# Each market maps to the package helper that configures the correct upstream
+# scan context. set_markets('crypto') returns 0 rows for several markets, so we
+# start from these pre-configured Query builders instead.
+_MARKET_QUERY = {
+    "america": lambda: stocks("america"),
+    "crypto": crypto,
+    "forex": forex,
+    "futures": futures,
+    "bond": bond,
+    "cfd": cfd,
+}
+
+
+def _base_query(market: str) -> Query:
+    """Return a fresh Query already scoped to the given market."""
+    factory = _MARKET_QUERY.get(market)
+    if factory is None:
+        raise ScreenerError(f"Unknown market: {market}")
+    return factory()
 
 # Markets the screener can target.
 MARKETS: list[dict] = [
@@ -145,7 +174,7 @@ def run_query(
         raise ScreenerError(f"Bad filter: {exc}") from exc
 
     try:
-        q = Query().select(*select_cols)
+        q = _base_query(market).select(*select_cols)
 
         if conds:
             if match == "any" and len(conds) > 1:
@@ -163,7 +192,6 @@ def run_query(
                 q = q.order_by(field, ascending=ascending)
 
         q = q.offset(max(0, offset)).limit(max(1, limit))
-        q = q.set_markets(market)
 
         count, df = q.get_scanner_data()
     except ScreenerError:
