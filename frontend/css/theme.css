@@ -4,8 +4,10 @@
  * spinner, toast). Synthwave / TraderDaddy / Bloomberg aesthetic.
  * No em dashes anywhere. */
 
-/* ---- Fonts ---- */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+/* ---- Fonts ----
+ * Chakra Petch: a techno / cyberpunk face for all UI chrome and headers.
+ * JetBrains Mono: tabular numerics, tickers, and every data cell. */
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 
 /* ---- Design tokens ---- */
 :root {
@@ -49,7 +51,7 @@
   --radius-lg: 8px;
 
   /* Fonts */
-  --font-ui: 'Inter', system-ui, sans-serif;
+  --font-ui: 'Chakra Petch', system-ui, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, monospace;
 
   /* Spacing scale (dense terminal) */
@@ -84,15 +86,163 @@ body {
   font-family: var(--font-ui);
   font-size: 13px;
   line-height: 1.4;
+  letter-spacing: 0.01em;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
   overflow: hidden;
-  /* Subtle synthwave horizon glow behind the whole app. */
-  background-image:
-    radial-gradient(1200px 600px at 80% -10%, rgba(176, 38, 255, 0.10), transparent 60%),
-    radial-gradient(1000px 500px at 0% 110%, rgba(0, 240, 255, 0.08), transparent 60%);
-  background-attachment: fixed;
 }
+::selection { background: rgba(0, 240, 255, 0.28); color: #fff; }
+
+/* ======================================================================
+ * Atmospheric depth: a synthwave horizon, a perspective grid receding to
+ * it, fine scanlines, and a grain wash. All fixed, behind the app, and
+ * non-interactive so the data terminal stays perfectly legible.
+ * ==================================================================== */
+#atmos {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+#app { position: relative; z-index: 1; }
+
+/* The horizon: a deep magenta-to-cyan glow pooled low, plus a high purple haze
+ * and a hot horizon line where the grid meets the sky. */
+.atmos-glow {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(1600px 360px at 50% 100%, rgba(255, 0, 110, 0.34), transparent 70%),
+    radial-gradient(1300px 300px at 50% 100%, rgba(0, 240, 255, 0.24), transparent 66%),
+    radial-gradient(900px 180px at 50% 100%, rgba(255, 255, 255, 0.12), transparent 72%),
+    radial-gradient(1300px 760px at 84% -14%, rgba(176, 38, 255, 0.18), transparent 58%),
+    radial-gradient(1000px 560px at 6% -10%, rgba(0, 240, 255, 0.10), transparent 56%);
+  animation: atmos-breathe 14s ease-in-out infinite;
+}
+@keyframes atmos-breathe {
+  0%, 100% { opacity: 0.9; }
+  50% { opacity: 1; }
+}
+
+/* Perspective grid: neon lines receding to the bottom horizon, scrolling slowly. */
+.atmos-grid {
+  position: absolute;
+  left: -30%;
+  right: -30%;
+  bottom: 0;
+  height: 44%;
+  background-image:
+    linear-gradient(rgba(0, 240, 255, 0.30) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(176, 38, 255, 0.22) 1px, transparent 1px);
+  background-size: 52px 52px, 52px 52px;
+  transform: perspective(360px) rotateX(72deg);
+  transform-origin: bottom center;
+  mask-image: linear-gradient(to top, #000 2%, rgba(0, 0, 0, 0.55) 30%, transparent 82%);
+  -webkit-mask-image: linear-gradient(to top, #000 2%, rgba(0, 0, 0, 0.55) 30%, transparent 82%);
+  animation: grid-scroll 7s linear infinite;
+}
+@keyframes grid-scroll {
+  from { background-position: 0 0, 0 0; }
+  to { background-position: 0 52px, 0 0; }
+}
+
+/* CRT scanlines: very low alpha so text never shimmers. */
+.atmos-scan {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.02) 0px,
+    rgba(255, 255, 255, 0.02) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: overlay;
+}
+
+/* Grain wash via an inline SVG turbulence, kept subtle. */
+.atmos-grain {
+  position: absolute;
+  inset: 0;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* ======================================================================
+ * Power-on boot sequence. A single orchestrated load: a scanline sweep
+ * crosses the screen, the grid and chrome rise in, the brand flickers on.
+ * Driven by body.booting, which app.js drops after the sequence.
+ * ==================================================================== */
+#boot {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  opacity: 0;
+}
+body.booting #boot {
+  opacity: 1;
+  background: linear-gradient(to bottom, transparent 0%, rgba(0, 240, 255, 0.10) 49%, rgba(0, 240, 255, 0.55) 50%, rgba(0, 240, 255, 0.10) 51%, transparent 100%);
+  background-size: 100% 8px;
+  background-repeat: no-repeat;
+  animation: boot-sweep 0.85s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+@keyframes boot-sweep {
+  0% { background-position: 0 -10%; opacity: 0; }
+  8% { opacity: 1; }
+  92% { opacity: 1; }
+  100% { background-position: 0 110%; opacity: 0; }
+}
+
+/* Chrome rises in, staggered, only during boot. */
+body.booting #topbar { animation: rise-down 0.5s ease both; animation-delay: 0.20s; }
+body.booting #left-rail { animation: rise-in 0.55s ease both; animation-delay: 0.34s; }
+body.booting #main-panel { animation: rise-in 0.55s ease both; animation-delay: 0.42s; }
+body.booting #footer,
+body.booting footer#footer { animation: rise-up 0.5s ease both; animation-delay: 0.5s; }
+body.booting .atmos-grid { animation: grid-rise 1.1s ease both; }
+body.booting .atmos-glow { animation: none; opacity: 0; animation: glow-in 1.2s ease forwards; }
+
+@keyframes rise-down { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: none; } }
+@keyframes rise-in { from { opacity: 0; transform: translateY(14px) scale(0.995); } to { opacity: 1; transform: none; } }
+@keyframes rise-up { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes grid-rise {
+  from { opacity: 0; transform: perspective(420px) rotateX(80deg) translateY(40px); }
+  to { opacity: 1; transform: perspective(420px) rotateX(68deg) translateY(0); }
+}
+@keyframes glow-in { from { opacity: 0; } to { opacity: 0.9; } }
+
+/* First few table rows cascade in once, during boot only. */
+body.booting #table-host tbody tr { animation: row-in 0.4s ease both; }
+body.booting #table-host tbody tr:nth-child(1) { animation-delay: 0.46s; }
+body.booting #table-host tbody tr:nth-child(2) { animation-delay: 0.50s; }
+body.booting #table-host tbody tr:nth-child(3) { animation-delay: 0.54s; }
+body.booting #table-host tbody tr:nth-child(4) { animation-delay: 0.58s; }
+body.booting #table-host tbody tr:nth-child(5) { animation-delay: 0.62s; }
+body.booting #table-host tbody tr:nth-child(6) { animation-delay: 0.66s; }
+body.booting #table-host tbody tr:nth-child(7) { animation-delay: 0.70s; }
+body.booting #table-host tbody tr:nth-child(8) { animation-delay: 0.74s; }
+body.booting #table-host tbody tr:nth-child(9) { animation-delay: 0.78s; }
+body.booting #table-host tbody tr:nth-child(n+10) { animation-delay: 0.82s; }
+@keyframes row-in { from { opacity: 0; transform: translateX(-8px); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  #boot, .atmos-glow { animation: none !important; }
+  body.booting * { animation: none !important; }
+}
+
+/* ---- Neon scrollbars ---- */
+* { scrollbar-width: thin; scrollbar-color: rgba(0, 240, 255, 0.35) transparent; }
+*::-webkit-scrollbar { width: 9px; height: 9px; }
+*::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.25); }
+*::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, rgba(0, 240, 255, 0.5), rgba(176, 38, 255, 0.5));
+  border-radius: 6px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+*::-webkit-scrollbar-thumb:hover { background: linear-gradient(180deg, rgba(0, 240, 255, 0.8), rgba(176, 38, 255, 0.8)); background-clip: padding-box; }
 
 button,
 input,

@@ -11,7 +11,17 @@
   <link rel="stylesheet" href="css/layout.css" />
   <link rel="stylesheet" href="css/table.css" />
 </head>
-<body>
+<body class="booting">
+  <!-- Atmospheric depth layers (synthwave horizon, grid, scanlines, grain). -->
+  <div id="atmos" aria-hidden="true">
+    <div class="atmos-glow"></div>
+    <div class="atmos-grid"></div>
+    <div class="atmos-scan"></div>
+    <div class="atmos-grain"></div>
+  </div>
+  <!-- Boot sweep, removed after the power-on sequence finishes. -->
+  <div id="boot" aria-hidden="true"></div>
+
   <div id="app">
 
     <!-- ============ TOP BAR ============ -->
@@ -138,6 +148,13 @@
   <!-- Wave 7 modules -->
   <script type="module" src="js/panels.js"></script>
   <!-- =================================================================== -->
+
+  <!-- Power-on: drop the boot class once the sequence has played. -->
+  <script>
+    window.addEventListener('load', () => {
+      setTimeout(() => document.body.classList.remove('booting'), 1700);
+    });
+  </script>
 
 </body>
 </html>

@@ -642,5 +642,28 @@
       "assert more note"
     ],
     "passes": true
+  },
+  {
+    "id": 62,
+    "category": "style",
+    "description": "Frontend-design pass: Chakra Petch UI type + JetBrains Mono data, layered synthwave atmosphere (horizon glow, perspective grid, scanlines, grain), neon horizon lines, custom neon scrollbars",
+    "steps": [
+      "load app",
+      "assert Chakra Petch on UI",
+      "assert atmosphere layers present",
+      "assert horizon line"
+    ],
+    "passes": true
+  },
+  {
+    "id": 63,
+    "category": "style",
+    "description": "Orchestrated power-on boot sequence: scanline sweep, staggered chrome rise-in, row cascade, brand neon flicker; respects prefers-reduced-motion",
+    "steps": [
+      "reload",
+      "assert boot animations fire",
+      "assert teardown after sequence"
+    ],
+    "passes": true
   }
 ]
