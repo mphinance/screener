@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NEON SCREENER - TradingView, AI'ed</title>
+<meta name="description" content="A synthwave showcase of what you can build on TradingView: free widgets, the open-source Lightweight Charts core, and an MCP server so your AI can drive it all." />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<!-- Ticker tape -->
+<div class="tape">
+  <div class="tradingview-widget-container">
+    <div class="tradingview-widget-container__widget"></div>
+    <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-ticker-tape.js" async>
+    {"symbols":[{"proName":"NASDAQ:NVDA","title":"NVDA"},{"proName":"NASDAQ:AAPL","title":"AAPL"},{"proName":"NASDAQ:TSLA","title":"TSLA"},{"proName":"NASDAQ:AMD","title":"AMD"},{"proName":"BINANCE:BTCUSDT","title":"BTC"},{"proName":"BINANCE:ETHUSDT","title":"ETH"},{"proName":"FX:EURUSD","title":"EURUSD"},{"proName":"TVC:GOLD","title":"GOLD"}],"colorTheme":"dark","isTransparent":true,"displayMode":"adaptive","locale":"en"}
+    </script>
+  </div>
+</div>
+
+<!-- Nav -->
+<nav class="nav">
+  <div class="wrap">
+    <span class="brand">NEON SCREENER</span>
+    <div class="links">
+      <a href="#pitch">The pitch</a>
+      <a href="#widgets">Widgets</a>
+      <a href="#build">Build your own</a>
+      <a href="#mcp">AI / MCP</a>
+      <a href="https://github.com/mphinance/screener">GitHub</a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero -->
+<header class="hero">
+  <div class="wrap">
+    <div class="kicker">TradingView, AI'ed</div>
+    <h1>Build your own<br />TradingView at home</h1>
+    <p class="lede">Everything here runs on TradingView's own libraries: the free embeddable widgets, the open-source Lightweight Charts core, and a screener with an MCP server so your AI can screen, read charts, and rank markets for you. No outside data, anywhere.</p>
+    <div class="cta">
+      <a class="btn" href="#widgets">See the widgets</a>
+      <a class="btn alt" href="#mcp">Drive it with AI</a>
+    </div>
+  </div>
+</header>
+
+<!-- Pitch -->
+<section id="pitch">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Three free tiers</div>
+      <h2>What TradingView hands you for free</h2>
+      <p>You do not need a data vendor or a charting startup. TradingView already ships the pieces. Here is the honest map of what you can self-host versus embed.</p>
+    </div>
+    <div class="tiers">
+      <div class="tier">
+        <span class="tag">EMBED // ZERO SETUP</span>
+        <h3>Widgets</h3>
+        <p>Drop-in script tags. TradingView hosts them and supplies the data. Charts, heatmaps, screeners, calendars, news. The whole gallery below is live widgets.</p>
+      </div>
+      <div class="tier">
+        <span class="tag">APACHE 2.0 // SELF-HOST</span>
+        <h3>Lightweight Charts</h3>
+        <p>The open-source charting core on npm. Fully redistributable, you bring your own data. This is the real DIY TradingView. There is a live one below.</p>
+      </div>
+      <div class="tier">
+        <span class="tag">FREE // ACCESS-GATED</span>
+        <h3>Advanced Charts</h3>
+        <p>The full charting library: drawing tools, indicators, your own datafeed. Free but you apply for access and host it yourself. The pro tier of the DIY path.</p>
+      </div>
+      <div class="tier">
+        <span class="tag">YOURS // MCP</span>
+        <h3>The AI layer</h3>
+        <p>A screener plus an MCP server turns all of the above into something an agent can drive: screen, read a chart across timeframes, rank by factor. Pure TradingView.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Widget gallery -->
+<section id="widgets">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Live, no account</div>
+      <h2>The widget gallery</h2>
+      <p>Every panel below is an official TradingView widget, embedded as-is. This is the easiest tier: copy a script tag, get a live chart.</p>
+    </div>
+
+    <div class="grid">
+      <!-- Advanced chart -->
+      <div class="card span12 h460">
+        <div class="card-h"><span class="t neon-cyan">Advanced Chart</span><span class="s">embed-widget-advanced-chart</span></div>
+        <div class="widgetbox">
+          <div class="tradingview-widget-container">
+            <div class="tradingview-widget-container__widget"></div>
+            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js" async>
+            {"autosize":true,"symbol":"NASDAQ:NVDA","interval":"D","timezone":"Etc/UTC","theme":"dark","style":"1","locale":"en","enable_publishing":false,"hide_side_toolbar":false,"allow_symbol_change":true,"studies":["STD;RSI","STD;MACD"],"support_host":"https://www.tradingview.com"}
+            </script>
+          </div>
+        </div>
+      </div>
+
+      <!-- Symbol overview -->
+      <div class="card span6 h360">
+        <div class="card-h"><span class="t neon-purple">Symbol Overview</span><span class="s">embed-widget-symbol-overview</span></div>
+        <div class="widgetbox">
+          <div class="tradingview-widget-container">
+            <div class="tradingview-widget-container__widget"></div>
+            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-symbol-overview.js" async>
+            {"symbols":[["NVIDIA","NASDAQ:NVDA|1D"],["Apple","NASDAQ:AAPL|1D"],["Bitcoin","BINANCE:BTCUSDT|1D"]],"chartOnly":false,"width":"100%","height":"100%","locale":"en","colorTheme":"dark","isTransparent":true,"autosize":true,"showVolume":false,"showMA":false,"fontColor":"#8a8aa0","gridLineColor":"rgba(255,255,255,0.06)","backgroundColor":"rgba(0,0,0,0)","lineColor":"#00f0ff","topColor":"rgba(0,240,255,0.2)","bottomColor":"rgba(0,240,255,0)"}
+            </script>
+          </div>
+        </div>
+      </div>
+
+      <!-- Technical analysis gauge -->
+      <div class="card span6 h360">
+        <div class="card-h"><span class="t neon-green">Technical Gauge</span><span class="s">embed-widget-technical-analysis</span></div>
+        <div class="widgetbox">
+          <div class="tradingview-widget-container">
+            <div class="tradingview-widget-container__widget"></div>
+            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-technical-analysis.js" async>
+            {"interval":"1D","width":"100%","isTransparent":true,"height":"100%","symbol":"NASDAQ:NVDA","showIntervalTabs":true,"displayMode":"single","locale":"en","colorTheme":"dark"}
+            </script>
+          </div>
+        </div>
+      </div>
+
+      <!-- Stock heatmap -->
+      <div class="card span6 h460">
+        <div class="card-h"><span class="t neon-pink">Stock Heatmap</span><span class="s">embed-widget-stock-heatmap</span></div>
+        <div class="widgetbox">
+          <div class="tradingview-widget-container">
+            <div class="tradingview-widget-container__widget"></div>
+            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-stock-heatmap.js" async>
+            {"dataSource":"SPX500","blockSize":"market_cap_basic","blockColor":"change","grouping":"sector","locale":"en","symbolUrl":"","colorTheme":"dark","hasTopBar":false,"isDataSetEnabled":false,"isZoomEnabled":true,"hasSymbolTooltip":true,"isMonoSize":false,"width":"100%","height":"100%"}
+            </script>
+          </div>
+        </div>
+      </div>
+
+      <!-- Crypto heatmap -->
+      <div class="card span6 h460">
+        <div class="card-h"><span class="t neon-cyan">Crypto Heatmap</span><span class="s">embed-widget-crypto-coins-heatmap</span></div>
+        <div class="widgetbox">
+          <div class="tradingview-widget-container">
+            <div class="tradingview-widget-container__widget"></div>
+            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-crypto-coins-heatmap.js" async>
+            {"dataSource":"Crypto","blockSize":"market_cap_calc","blockColor":"change","locale":"en","symbolUrl":"","colorTheme":"dark","hasTopBar":false,"isDataSetEnabled":false,"isZoomEnabled":true,"hasSymbolTooltip":true,"isMonoSize":false,"width":"100%","height":"100%"}
+            </script>
+          </div>
+        </div>
+      </div>
+
+      <!-- Market overview -->
+      <div class="card span6 h460">
+        <div class="card-h"><span class="t neon-purple">Market Overview</span><span class="s">embed-widget-market-overview</span></div>
+        <div class="widgetbox">
+          <div class="tradingview-widget-container">
+            <div class="tradingview-widget-container__widget"></div>
+            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-market-overview.js" async>
+            {"colorTheme":"dark","dateRange":"12M","showChart":true,"locale":"en","width":"100%","height":"100%","isTransparent":true,"showSymbolLogo":true,"showFloatingTooltip":true,"tabs":[{"title":"Indices","symbols":[{"s":"FOREXCOM:SPXUSD","d":"S&P 500"},{"s":"FOREXCOM:NSXUSD","d":"Nasdaq 100"},{"s":"FOREXCOM:DJI","d":"Dow 30"}]},{"title":"Crypto","symbols":[{"s":"BINANCE:BTCUSDT","d":"Bitcoin"},{"s":"BINANCE:ETHUSDT","d":"Ethereum"}]}]}
+            </script>
+          </div>
+        </div>
+      </div>
+
+      <!-- Screener widget -->
+      <div class="card span6 h460">
+        <div class="card-h"><span class="t neon-green">Screener</span><span class="s">embed-widget-screener</span></div>
+        <div class="widgetbox">
+          <div class="tradingview-widget-container">
+            <div class="tradingview-widget-container__widget"></div>
+            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-screener.js" async>
+            {"width":"100%","height":"100%","defaultColumn":"overview","defaultScreen":"most_capitalized","market":"america","showToolbar":true,"colorTheme":"dark","locale":"en","isTransparent":true}
+            </script>
+          </div>
+        </div>
+      </div>
+
+      <!-- Economic calendar -->
+      <div class="card span6 h360">
+        <div class="card-h"><span class="t neon-yellow" style="color:var(--yellow)">Economic Calendar</span><span class="s">embed-widget-events</span></div>
+        <div class="widgetbox">
+          <div class="tradingview-widget-container">
+            <div class="tradingview-widget-container__widget"></div>
+            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-events.js" async>
+            {"colorTheme":"dark","isTransparent":true,"width":"100%","height":"100%","locale":"en","importanceFilter":"-1,0,1","countryFilter":"us,eu,gb,jp"}
+            </script>
+          </div>
+        </div>
+      </div>
+
+      <!-- Top stories -->
+      <div class="card span6 h360">
+        <div class="card-h"><span class="t neon-pink">Top Stories</span><span class="s">embed-widget-timeline</span></div>
+        <div class="widgetbox">
+          <div class="tradingview-widget-container">
+            <div class="tradingview-widget-container__widget"></div>
+            <script type="text/javascript" src="https://s3.tradingview.com/external-embedding/embed-widget-timeline.js" async>
+            {"feedMode":"market","market":"stock","isTransparent":true,"displayMode":"regular","width":"100%","height":"100%","colorTheme":"dark","locale":"en"}
+            </script>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Build your own (Lightweight Charts) -->
+<section id="build">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Apache 2.0, self-hosted</div>
+      <h2>Build your own with Lightweight Charts</h2>
+      <p>This panel is not a widget. It is TradingView's open-source Lightweight Charts library, loaded from a CDN and fed data right here in the page. This is the core you can ship in your own product.</p>
+    </div>
+    <div class="card span12">
+      <div class="card-h"><span class="t neon-cyan">Lightweight Charts</span><span class="s mono">npm i lightweight-charts</span></div>
+      <div id="lwc"></div>
+      <div class="lwc-controls" id="lwc-controls">
+        <button class="chip on" data-series="candles">Candles</button>
+        <button class="chip" data-series="line">Line</button>
+        <button class="chip" data-series="area">Area</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MCP -->
+<section id="mcp">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">The point</div>
+      <h2>Now let your AI drive it</h2>
+      <p>The screener ships an MCP server, so Claude can screen, compare, rank by factor, and read a chart across every timeframe at once. No swapping, no scraping. Pure TradingView data.</p>
+    </div>
+    <div class="mcp">
+      <div class="codeblock">
+<pre><span class="c-com"># claude_desktop_config.json</span>
+{
+  <span class="c-key">"mcpServers"</span>: {
+    <span class="c-key">"neon-screener"</span>: {
+      <span class="c-key">"command"</span>: <span class="c-str">"/abs/path/.venv/bin/python"</span>,
+      <span class="c-key">"args"</span>: [<span class="c-str">"/abs/path/run_mcp.py"</span>]
+    }
+  }
+}
+
+<span class="c-com"># then just ask:</span>
+<span class="c-str">"Read NVDA across timeframes and rank
+ mega-cap momentum, then chart the leader."</span>
+
+<span class="c-com"># analyze() answers, multi-timeframe:</span>
+NVDA 208.19: Neutral overall.
+RSI 46 (bearish); MACD bullish;
+timeframes mixed (1w/1m bull, 1h/4h/1d bear).
+</pre>
+      </div>
+      <div>
+        <p style="color:var(--muted);margin-top:0">16 MCP tools and 4 canned prompts. The screening engine, plus symbol intelligence:</p>
+        <div class="toollist">
+          <span class="pill"><b>analyze</b> chart read, all timeframes</span>
+          <span class="pill"><b>screen</b> filters + factors + stats</span>
+          <span class="pill"><b>technical_rating</b> the TV gauge</span>
+          <span class="pill"><b>compare</b> symbols side by side</span>
+          <span class="pill"><b>chart</b> deep link + widget</span>
+          <span class="pill"><b>sector_breakdown</b></span>
+          <span class="pill"><b>search_symbols</b></span>
+          <span class="pill"><b>run_factor_preset</b></span>
+        </div>
+        <p style="margin-top:18px"><a class="btn" href="https://github.com/mphinance/screener">Get the screener</a></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span class="brand" style="font-size:15px">NEON SCREENER</span>
+    <span class="disc">A showcase of what you can build on TradingView. Charts and data are by <a href="https://www.tradingview.com" rel="noopener">TradingView</a>. Lightweight Charts is Apache 2.0. This project is an independent showcase and is not affiliated with or endorsed by TradingView.</span>
+    <a href="https://github.com/mphinance/screener" style="margin-left:auto">github.com/mphinance/screener</a>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/lightweight-charts@4.2.3/dist/lightweight-charts.standalone.production.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
