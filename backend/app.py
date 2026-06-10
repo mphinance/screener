@@ -21,7 +21,7 @@ from .pipeline import run_screen
 from .presets import FACTOR_PRESETS, PRESETS
 from .screener import MARKETS
 
-app = FastAPI(title="Neon Screener API", version="1.0")
+app = FastAPI(title="Scanline API", version="1.0")
 
 app.add_middleware(
     CORSMiddleware,

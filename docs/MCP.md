@@ -1,6 +1,6 @@
 # MCP reference
 
-The NEON SCREENER MCP server (`backend/mcp_server.py`) exposes the live screen
+The SCANLINE MCP server (`backend/mcp_server.py`) exposes the live screen
 engine over the Model Context Protocol so any MCP client can screen, score,
 rank, and read charts. Built on `fastmcp`. Pure TradingView data, no account
 needed (data is live and delayed).
@@ -20,7 +20,7 @@ Claude Code, with absolute paths:
 ```json
 {
   "mcpServers": {
-    "neon-screener": {
+    "scanline": {
       "command": "/abs/path/.venv/bin/python",
       "args": ["/abs/path/run_mcp.py"]
     }

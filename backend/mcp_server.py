@@ -1,4 +1,4 @@
-"""NEON SCREENER as an MCP server.
+"""SCANLINE as an MCP server.
 
 Exposes the exact same screen engine the web app uses (backend/pipeline.py)
 over the Model Context Protocol, so any MCP client (Claude Desktop, Claude
@@ -45,7 +45,7 @@ from .pipeline import run_screen
 from .presets import FACTOR_PRESETS, PRESETS
 from .screener import MARKETS
 
-mcp = FastMCP("neon-screener")
+mcp = FastMCP("scanline")
 
 # Resilience + a tiny bit of self-awareness for the stats tool.
 _cache = TTLCache(ttl_seconds=20)
@@ -843,7 +843,7 @@ def sector_breakdown(market: str = "america", filters: list[dict] | None = None,
 def momentum_breakouts(market: str = "america") -> str:
     """Find and read the strongest momentum breakouts right now."""
     return (
-        f"Use the neon-screener tools on the {market} market. Run the "
+        f"Use the scanline tools on the {market} market. Run the "
         "`signal_volume_breakout` and `signal_stacked_ema_ribbon` presets via "
         "run_preset, then for the top 3 names call `analyze` to read each chart. "
         "Summarize which look like the cleanest breakouts and why, citing the "

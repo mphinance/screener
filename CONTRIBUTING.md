@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for poking at NEON SCREENER. This is a focused project with a few firm
+Thanks for poking at SCANLINE. This is a focused project with a few firm
 rules; read `AGENTS.md` first, it is the canonical guide. The short version is
 below.
 

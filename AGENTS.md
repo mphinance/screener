@@ -5,7 +5,7 @@ canonical project guide. `CLAUDE.md` points here.
 
 ## What this is
 
-NEON SCREENER is a live, real-data market screener with a quant analytics layer,
+SCANLINE is a live, real-data market screener with a quant analytics layer,
 plus an MCP server so an AI agent can drive it. It is a showcase of what you can
 build on TradingView: the screener app you run at home, a static widget showcase
 for GitHub Pages, and an MCP layer that makes the whole thing AI-drivable.
@@ -48,7 +48,7 @@ frontend/       vanilla JS, ES modules registering via window.Screener.registerM
   css/theme.css   the synthwave design tokens (the source of truth for the look)
   js/             feature modules (filters, columns, presets, factor, table, detail, openin, ...)
 showcase/       static GitHub Pages site (widget gallery + Lightweight Charts)
-pine/           Pine Script meant for AI to read (neon_ai_read.pine)
+pine/           Pine Script meant for AI to read (scanline_ai_read.pine)
 docs/           screenshots + capture scripts + ARCHITECTURE.md + MCP.md
 tests/          pytest (analytics math, MCP wiring, live API smoke)
 run.py          launches the web app on 127.0.0.1:8000
@@ -98,7 +98,7 @@ Register it (Claude Desktop `claude_desktop_config.json`, or a project
 ```json
 {
   "mcpServers": {
-    "neon-screener": {
+    "scanline": {
       "command": "/abs/path/.venv/bin/python",
       "args": ["/abs/path/run_mcp.py"]
     }

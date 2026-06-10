@@ -1,3 +1,3 @@
-"""Neon Screener backend package."""
+"""Scanline backend package."""
 
 __all__ = ["app"]

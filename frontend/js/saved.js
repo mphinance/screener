@@ -5,7 +5,7 @@
 //                  load / rename / delete. Persists across reloads.
 //   WATCHLIST      a list of tickers. Add via input, remove, persists. A topbar
 //                  toggle renders a compact starred-rows view inside #saved-panel
-//                  from the CURRENT result. Global helper window.NeonWatch.
+//                  from the CURRENT result. Global helper window.ScanlineWatch.
 //   CSV EXPORT     a topbar button that downloads the current result as CSV in
 //                  displayed column order, quoting fields that need it.
 //
@@ -14,8 +14,8 @@
 //
 // Registers as module 'saved'. No em dashes anywhere.
 
-const LS_SCREENS = 'neon.savedScreens';
-const LS_WATCH = 'neon.watchlist';
+const LS_SCREENS = 'scanline.savedScreens';
+const LS_WATCH = 'scanline.watchlist';
 
 // ---- localStorage helpers, all guarded so a corrupt value never throws.
 function loadArray(key) {
@@ -279,7 +279,7 @@ window.Screener.registerModule('saved', (ctx) => {
     return String(cand).trim().toUpperCase();
   }
 
-  const NeonWatch = {
+  const ScanlineWatch = {
     has(ticker) {
       return watch.includes(String(ticker || '').trim().toUpperCase());
     },
@@ -297,7 +297,7 @@ window.Screener.registerModule('saved', (ctx) => {
       return watch.slice();
     },
   };
-  window.NeonWatch = NeonWatch;
+  window.ScanlineWatch = ScanlineWatch;
 
   // ====================================================================
   //  PANEL LAYOUT
@@ -645,7 +645,7 @@ window.Screener.registerModule('saved', (ctx) => {
         .replace('T', '_')
         .slice(0, 19);
       const market = store.state.market || 'market';
-      const filename = 'neon-screener-' + market + '-' + stamp + '.csv';
+      const filename = 'scanline-' + market + '-' + stamp + '.csv';
       const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');

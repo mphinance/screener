@@ -1,4 +1,4 @@
-# SPEC - NEON SCREENER
+# SPEC - SCANLINE
 
 > The most complete market screener of all time. A **quant analytics layer** on top of
 > TradingView's data - not a TradingView clone. Built in Michael Hanko's synthwave /

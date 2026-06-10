@@ -1,6 +1,6 @@
 # Acknowledgments and thanks
 
-NEON SCREENER stands on a lot of other people's work. Genuine thanks to all of
+SCANLINE stands on a lot of other people's work. Genuine thanks to all of
 the below. Anything good here is built on these; anything broken is ours.
 
 ## TradingView

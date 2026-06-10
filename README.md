@@ -1,4 +1,4 @@
-# NEON SCREENER
+# SCANLINE
 
 [![CI](https://github.com/mphinance/screener/actions/workflows/ci.yml/badge.svg)](https://github.com/mphinance/screener/actions/workflows/ci.yml)
 [![Live demo](https://img.shields.io/badge/demo-github_pages-00f0ff)](https://mphinance.github.io/screener/)
@@ -27,7 +27,7 @@ live Lightweight Charts panel, that deploys to GitHub Pages:
 
 *Every load powers on like an 80s mainframe.*
 
-![Neon Screener](docs/hero.png)
+![Scanline](docs/hero.png)
 
 Hit `\` for full-table mode: the rail folds away and the factor-ranked table takes the whole screen.
 
@@ -143,7 +143,7 @@ Register it with Claude Desktop (`claude_desktop_config.json`), using absolute p
 ```json
 {
   "mcpServers": {
-    "neon-screener": {
+    "scanline": {
       "command": "/abs/path/screener/.venv/bin/python",
       "args": ["/abs/path/screener/run_mcp.py"]
     }

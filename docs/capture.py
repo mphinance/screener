@@ -1,4 +1,4 @@
-"""Capture README screenshots of the running Neon Screener with headless Chromium.
+"""Capture README screenshots of the running Scanline with headless Chromium.
 
 Run the backend first (python run.py), then: python docs/capture.py
 Writes PNGs into docs/.

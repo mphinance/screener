@@ -1,4 +1,4 @@
-# STATUS — NEON SCREENER
+# STATUS - SCANLINE
 
 **Build complete. 52 / 52 features passing.** A real, live market screener with a quant analytics
 layer, in the synthwave aesthetic. Built with the orchestrator pattern: 7 waves, 11 parallel
@@ -31,6 +31,17 @@ across 6 markets. The differentiator is the analytics layer on top of the raw sc
 
 ## Wave log
 
+- **Wave 14** Renamed the project to SCANLINE (was NEON SCREENER) across all code, docs, UI copy,
+  and the MCP server name, in one pass. Kept the GitHub repo name and the live Pages URL stable so
+  nothing breaks. Renamed `pine/neon_ai_read.pine` to `pine/scanline_ai_read.pine`. Fixed a stray
+  em dash in this file. Full suite green after the rename.
+- **Wave 13** CI + social + docs. GitHub Actions CI runs the offline suite on every push (green
+  badge). Social preview (OG / Twitter meta, favicon, 1200x630 og.png). Full documentation set:
+  AGENTS.md, CLAUDE.md, ACKNOWLEDGMENTS.md, CONTRIBUTING.md, docs/ARCHITECTURE.md, docs/MCP.md.
+- **Wave 12** GitHub Pages showcase (`showcase/`): a static, pure-TradingView site, a live widget
+  gallery plus a Lightweight Charts panel, deployed to Pages via Actions. Live and serving at
+  mphinance.github.io/screener. The client-side half to the run-at-home app.
+
 - **Wave 0** Scaffold: spec, 46-assertion feature list, deps.
 - **Wave 1** Backend foundation (serial). Fixed: switched to per-market helpers so all 6 markets
   return live rows (set_markets returned 0 for crypto/forex).
@@ -50,7 +61,7 @@ across 6 markets. The differentiator is the analytics layer on top of the raw sc
   / rating / signals, and it is multi-timeframe in one call, RSI and MACD bias on the 1h / 4h / 1d
   / 1w / 1m with an alignment verdict (verified live: TSLA "fully aligned bearish," NVDA and AAPL
   the short-weak / long-strong split). `chart` returns a live TradingView deep link plus a
-  ready-to-embed Advanced Chart widget config. Everything pure TradingView. `pine/neon_ai_read.pine`
+  ready-to-embed Advanced Chart widget config. Everything pure TradingView. `pine/scanline_ai_read.pine`
   is the on-chart twin: a v6 indicator that prints a machine-parseable read for an AI to consume off
   a screenshot, same signal vocabulary as `analyze`. 9 new tests (offline helpers + live data tools).
 

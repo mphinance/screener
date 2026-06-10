@@ -1,4 +1,4 @@
-# NEON SCREENER showcase (GitHub Pages)
+# SCANLINE showcase (GitHub Pages)
 
 The client-side half of the project: a static, no-backend showcase of what you
 can build on TradingView. It is the live demo you can host on GitHub Pages, the

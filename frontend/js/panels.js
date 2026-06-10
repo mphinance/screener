@@ -2,7 +2,7 @@
 // a hide toggle for full-table mode. Persists the active tab and hidden state.
 // Touches the shell only, never the modules that render into each panel body.
 
-const STORE_KEY = "neon.railState";
+const STORE_KEY = "scanline.railState";
 
 // Compact tab labels for the section titles (the panel bodies keep their ids).
 const LABELS = {

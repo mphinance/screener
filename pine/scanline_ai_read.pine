@@ -1,5 +1,5 @@
 //@version=6
-// NEON AI READ - a chart indicator meant to be read by an AI.
+// SCANLINE AI READ - a chart indicator meant to be read by an AI.
 //
 // Most indicators are drawn for a human to eyeball. This one prints a
 // high-contrast, machine-parseable read of the chart so that when you screenshot
@@ -14,9 +14,9 @@
 // parse deterministically, e.g.
 //   AI|trend=UP;rsi=46;macd=BEAR;adx=19;pos52=70%;rvol=0.96;rating=NEUTRAL
 //
-// No em dashes anywhere. Synthwave palette to match NEON SCREENER.
+// No em dashes anywhere. Synthwave palette to match SCANLINE.
 
-indicator("NEON AI READ", overlay = true)
+indicator("SCANLINE AI READ", overlay = true)
 
 // ---- Palette (synthwave) ---------------------------------------------------
 cCyan   = #00f0ff
@@ -87,11 +87,11 @@ ratingCol = score >= 0.1 ? cGreen : score <= -0.1 ? cPink : cYellow
 // ---- Headline signal: aligned bull pullback (same idea as Bounce 2.0) ------
 pullback_buy = full_bull and adx_strong and (k <= 40) and (math.abs((close - ema21) / ema21 * 100) <= 5)
 plotshape(pullback_buy, title = "Aligned pullback", location = location.belowbar, color = color.new(cGreen, 0), style = shape.labelup, text = "AI BUY", textcolor = cInk, size = size.small)
-alertcondition(pullback_buy, title = "NEON AI READ: aligned pullback", message = "Aligned bull pullback on {{ticker}}: ribbon stacked, ADX strong, Stoch oversold near EMA21.")
+alertcondition(pullback_buy, title = "SCANLINE AI READ: aligned pullback", message = "Aligned bull pullback on {{ticker}}: ribbon stacked, ADX strong, Stoch oversold near EMA21.")
 
 // Fire an alert whenever the composite rating flips.
 ratingFlip = ta.change(score >= 0.1 ? 1 : score <= -0.1 ? -1 : 0) != 0
-alertcondition(ratingFlip, title = "NEON AI READ: rating changed", message = "NEON AI READ rating changed on {{ticker}}.")
+alertcondition(ratingFlip, title = "SCANLINE AI READ: rating changed", message = "SCANLINE AI READ rating changed on {{ticker}}.")
 
 // ---- Human dashboard (top right) -------------------------------------------
 yes(b) => b ? cGreen : cPink
@@ -100,7 +100,7 @@ f1(x) => str.tostring(x, "#.#")
 var table dash = table.new(position.top_right, 2, 8, bgcolor = color.new(cInk, 12), border_width = 1, border_color = color.new(cPurple, 70), frame_width = 1, frame_color = color.new(cCyan, 60))
 
 if barstate.islast
-    table.cell(dash, 0, 0, "NEON AI READ", text_color = cCyan, text_halign = text.align_left, text_size = size.small)
+    table.cell(dash, 0, 0, "SCANLINE AI READ", text_color = cCyan, text_halign = text.align_left, text_size = size.small)
     table.cell(dash, 1, 0, syminfo.ticker, text_color = cCyan, text_halign = text.align_right, text_size = size.small)
 
     table.cell(dash, 0, 1, "TREND", text_color = color.white, text_halign = text.align_left)

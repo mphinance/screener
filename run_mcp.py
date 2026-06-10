@@ -1,4 +1,4 @@
-"""Launch the Neon Screener MCP server.
+"""Launch the Scanline MCP server.
 
 Default transport is stdio, which is what Claude Desktop and Claude Code expect:
 
