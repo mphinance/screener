@@ -1,5 +1,10 @@
 # NEON SCREENER
 
+[![CI](https://github.com/mphinance/screener/actions/workflows/ci.yml/badge.svg)](https://github.com/mphinance/screener/actions/workflows/ci.yml)
+[![Live demo](https://img.shields.io/badge/demo-github_pages-00f0ff)](https://mphinance.github.io/screener/)
+[![MCP](https://img.shields.io/badge/MCP-16_tools-b026ff)](AGENTS.md)
+[![License: MIT](https://img.shields.io/badge/license-MIT-00ff88)](LICENSE)
+
 The most complete market screener of all time. A **quant analytics layer** on top of
 TradingView's data, not a TradingView clone. Built in the synthwave / TraderDaddy /
 Bloomberg-terminal aesthetic.
@@ -186,8 +191,25 @@ tests/        pytest: analytics math, MCP wiring, + live API smoke
 python -m pytest tests/ -q
 ```
 
+## Docs
+
+- [AGENTS.md](AGENTS.md) the canonical guide for agents and contributors (rules, layout, how to extend).
+- [CLAUDE.md](CLAUDE.md) the quick entry point for Claude Code.
+- [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) how a screen flows through the pipeline and analytics.
+- [docs/MCP.md](docs/MCP.md) the full MCP tool, prompt, and resource reference.
+- [CONTRIBUTING.md](CONTRIBUTING.md) setup, tests, and how to add a preset, field, tool, or module.
+
 ## Notes
 
 - Read-only by design. No order execution, no money movement.
 - `tradingview-screener` exposes 3000+ fields. The catalog curates 172 of the most useful ones,
   grouped and typed; computed columns reach anything you can express from them.
+
+## Credits
+
+Built on TradingView and the [`tradingview-screener`](https://pypi.org/project/tradingview-screener/)
+library by shner-elmo ([source](https://github.com/shner-elmo/TradingView-Screener)). The MCP server
+uses [`fastmcp`](https://github.com/jlowin/fastmcp); the showcase uses TradingView's
+[widgets](https://www.tradingview.com/widget/) and
+[Lightweight Charts](https://github.com/tradingview/lightweight-charts). Full thanks and links in
+[ACKNOWLEDGMENTS.md](ACKNOWLEDGMENTS.md). Independent project, not affiliated with TradingView.

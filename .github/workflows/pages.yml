@@ -29,6 +29,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
+        with:
+          # Try to turn Pages on automatically on the first run, so you do not
+          # have to flip the source in Settings by hand. If your org disallows
+          # it, set Settings > Pages > Source: GitHub Actions once instead.
+          enablement: true
       - uses: actions/upload-pages-artifact@v3
         with:
           path: ./showcase
